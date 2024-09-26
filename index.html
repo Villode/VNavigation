@@ -3404,51 +3404,56 @@
 
 
     <script>
-        //夜间模式
+        // 夜间模式
         (function () {
-            if (document.cookie.replace(/(?:(?:^|.*;\s*)night\s*\=\s*([^;]*).*$)|^.*$/, "$1") === '') {
+            var nightMode = localStorage.getItem('nightMode');
+        
+            if (nightMode === null) {
+                // 根据时间判断是否启用夜间模式（默认行为）
                 if (new Date().getHours() > 22 || new Date().getHours() < 6) {
                     document.body.classList.remove('io-black-mode');
                     document.body.classList.add('io-grey-mode');
-                    document.cookie = "night=1;path=/";
+                    localStorage.setItem('nightMode', '1'); // 保存夜间模式状态
                     console.log('夜间模式开启');
                 } else {
                     document.body.classList.remove('night');
-                    document.cookie = "night=0;path=/";
+                    localStorage.setItem('nightMode', '0'); // 保存日间模式状态
                     console.log('夜间模式关闭');
                 }
             } else {
-                var night = document.cookie.replace(/(?:(?:^|.*;\s*)night\s*\=\s*([^;]*).*$)|^.*$/, "$1") || '0';
-                if (night == '0') {
+                // 如果用户之前已经选择过模式，读取用户的设定
+                if (nightMode === '0') {
                     document.body.classList.remove('night');
-                } else if (night == '1') {
+                } else if (nightMode === '1') {
                     document.body.classList.add('night');
                 }
             }
         })();
-        //夜间模式切换
+        
+        // 夜间模式切换
         function switchNightMode() {
-            var night = document.cookie.replace(/(?:(?:^|.*;\s*)night\s*\=\s*([^;]*).*$)|^.*$/, "$1") || '0';
-            if (night == '0') {
+            var nightMode = localStorage.getItem('nightMode') || '0';
+        
+            if (nightMode == '0') {
                 document.body.classList.remove('io-grey-mode');
                 document.body.classList.add('io-black-mode');
-                document.cookie = "night=1;path=/"
-                console.log(' ');
+                localStorage.setItem('nightMode', '1'); // 保存夜间模式
+                console.log('夜间模式开启');
                 $(".switch-dark-mode").attr("data-original-title", "日间模式");
                 $(".mode-ico").removeClass("icon-yejian");
                 $(".mode-ico").addClass("icon-yejianms");
             } else {
                 document.body.classList.remove('io-black-mode');
                 document.body.classList.add('io-grey-mode');
-                document.cookie = "night=0;path=/"
-                console.log(' ');
+                localStorage.setItem('nightMode', '0'); // 保存日间模式
+                console.log('夜间模式关闭');
                 $(".switch-dark-mode").attr("data-original-title", "夜间模式");
                 $(".mode-ico").removeClass("icon-yejianms");
                 $(".mode-ico").addClass("icon-yejian");
             }
         }
-
-    </script>
+        </script>
+        
 
     <!-- 看板 -->
 <!-- <script src="live2d/autoload.js"></script> -->
